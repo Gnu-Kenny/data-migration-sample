@@ -1,0 +1,11 @@
+# 가상환경
+venv
+# IDE
+.idea
+# sqlite
+migrations
+upload
+myapi.*
+*.ini
+# DS_Store
+.DS_Store
