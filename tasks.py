@@ -10,8 +10,15 @@ from models import V1Comment, Post, MappingComment, V2Comment
 
 @transactional
 def task_comment_migration(db: Session = Depends(get_db)):
+    """
+    모든 게시글에 달린 댓글 정보를 V1 -> V2로 동기화
+    :param db: DB 커넥션 객체
+    """
+
+    # 게시글 전체 조회
     posts: List[Post] = _find_all_post(db)
 
+    # 게시글 관련 댓글 정보 동기화
     for post in posts:
         _sync_comment_from_v1_to_v2(db, post.id)
 
@@ -30,11 +37,11 @@ def _sync_comment_from_v1_to_v2(db: Session, post_id: int):
     :return:
     """
     start_id = 0
-    chunk_size = 10000
+    chunk_size = 1000
 
     while start_id >= 0:
         print(f"동기화 시작 comment_id: {start_id}\n")
-        # 10,000개 단위로 데이터 조회
+        # 1,000개 단위로 데이터 조회
         v1comments: List[V1Comment] = _find_chunk_v1comment_by(
             db=db,
             post_id=post_id,
@@ -50,13 +57,11 @@ def _sync_comment_from_v1_to_v2(db: Session, post_id: int):
 
             # 관련 데이터 동기화
             _sync_comment_info(db, v1comment)
-            break
         print("v2comment 관련 데이터 생성 성공")
 
         # 다음 페이지 설정
         start_id = v1comments[-1].id if v1comments else -1
         print(f"\n동기화 종료 comment_id: {start_id}\n")
-        break
 
 
 def _find_chunk_v1comment_by(db: Session, post_id: int, start_id=0, chunk_size=10000) -> List[V1Comment]:
