@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pytz
 from fastapi import FastAPI
 from fastapi_amis_admin.admin.settings import Settings
@@ -7,6 +5,7 @@ from fastapi_amis_admin.admin.site import AdminSite
 from fastapi_scheduler import SchedulerAdmin
 
 from common.startup.create_dummy_data import create_dummy_data
+from tasks import task_comment_migration
 
 # Create `FastAPI` application
 app = FastAPI()
@@ -16,17 +15,10 @@ site = AdminSite(settings=Settings(database_url_async='sqlite+aiosqlite:///amisa
 scheduler = SchedulerAdmin.bind(site)
 
 
-# Add scheduled tasks, refer to the official documentation: https://apscheduler.readthedocs.io/en/master/
-# use when you want to run the job at fixed intervals of time
-@scheduler.scheduled_job('interval', minute=5)
-def interval_task_test():
-    print(f'[{datetime.now()}] interval task is run...')
-
-
 # use when you want to run the job periodically at certain time(s) of day
 @scheduler.scheduled_job('cron', hour=2, minute=0, timezone=pytz.timezone('Asia/Seoul'))
-def cron_task_test():
-    print('cron task is run...')
+def cron_task_comment():
+    task_comment_migration()
 
 
 @app.on_event("startup")

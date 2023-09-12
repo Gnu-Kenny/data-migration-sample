@@ -64,10 +64,10 @@ def _sync_comment_from_v1_to_v2(db: Session, post_id: int):
         print(f"\n동기화 종료 comment_id: {start_id}\n")
 
 
-def _find_chunk_v1comment_by(db: Session, post_id: int, start_id=0, chunk_size=10000) -> List[V1Comment]:
+def _find_chunk_v1comment_by(db: Session, post_id: int, start_id=0, chunk_size=1000) -> List[V1Comment]:
     """
     Offset를 항상 0으로 설정하고, Chunk Size 만큼 데이터를 일괄 조회하는 함수
-    :param db: 커넥션 객체
+    :param db: DB 커넥션 객체
     :param post_id: 게시글 ID
     :param start_id: 조회 시작
     :param chunk_size: 조회할 데이터 크기
