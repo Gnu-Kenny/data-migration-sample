@@ -18,13 +18,13 @@ scheduler = SchedulerAdmin.bind(site)
 
 # Add scheduled tasks, refer to the official documentation: https://apscheduler.readthedocs.io/en/master/
 # use when you want to run the job at fixed intervals of time
-@scheduler.scheduled_job('interval', seconds=1)
+@scheduler.scheduled_job('interval', minute=5)
 def interval_task_test():
     print(f'[{datetime.now()}] interval task is run...')
 
 
 # use when you want to run the job periodically at certain time(s) of day
-@scheduler.scheduled_job('cron', hour=16, minute=40, timezone=pytz.timezone('Asia/Seoul'))
+@scheduler.scheduled_job('cron', hour=2, minute=0, timezone=pytz.timezone('Asia/Seoul'))
 def cron_task_test():
     print('cron task is run...')
 
