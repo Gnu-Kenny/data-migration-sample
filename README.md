@@ -16,7 +16,7 @@
 2. 시간이 지남에 따라 일부 데이터에 대해 구버전, 신버전 데이터의 정합성이 맞지 않는 것을 확인
 3. 구버전 -> 신버전으로의 재동기화하고자 배치 프로그램 개발
 
-## 2. 동작 방식
+## 3. 동작 방식
 
 ![정합성이 틀어진 데이터 재동기화](https://github.com/2023-team-judy-coding-test-study/coding-test/assets/70069253/dd3c4b9f-36dd-4eb3-af35-f1a0cb1b9199)
 
@@ -62,7 +62,7 @@ def _sync_comment_from_v1_to_v2(db: Session, post_id: int):
         start_id = v1comments[-1].id if v1comments else -1
 ```
 
-## 실행 방법
+## 4. 실행 방법
 
 1. `sh init_server.sh`
     - 초기 설정
